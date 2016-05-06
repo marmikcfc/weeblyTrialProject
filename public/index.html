@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<!-- the following line is needed because the SPA urls would show # characters otherwise. It also needs line 27 in app.js -->
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>Weebly Trial Project</title>
+	
+	<!-- Import boostrap and jquery -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<!-- import css -->
+	<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+	<!-- Include the core AngularJS library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+	<!-- Include the AngularJS routing library -->
+	<script src="https://code.angularjs.org/1.2.28/angular-route.min.js"></script>
+	
+	
+	 <!-- Angular Material requires Angular.js Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-messages.min.js"></script>
+
+  <!-- Angular Material Library -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+	  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+
+    <script type="text/javascript" src="js/vendor/ng-file-upload.js"></script>
+    <script type="text/javascript" src="js/vendor/ng-file-upload-shim.js"></script>
+
+
+  
+
+
+</head>
+<body ng-app="BoilerplateApp" ng-controller="IndexController">
+	
+	
+	<!-- navigator and footer and ng-view in the middle -->
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">Weebly</a>
+			</div>
+
+			<!-- Collect the nav links, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="navbar">
+				<!-- right navbar login and signup and logout -->
+				<ul class="nav navbar-nav navbar-right">
+					<p class="navbar-btn" ng-hide="userLoggedIn">
+						<a href="/login" class="btn btn-primary">Login</a>
+						<a href="/signup" class="btn btn-default">Sign Up</a>
+					</p>
+					<p class="navbar-btn" ng-show="userLoggedIn">
+						Welcome, {{email}}!
+						<a ng-click="logout()" class="btn btn-danger">Logout</a>
+					</p>
+				</ul>
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+
+	<div ng-view class="view"></div>
+
+	<!-- footer -->
+	<div class="navbar navbar-default navbar-fixed-bottom nav-center">
+		<div class="container nav nav-center">
+		</div>
+	</div>
+
+	<!-- Modules -->
+	<script src="js/app.js"></script>
+
+	<!-- Controllers -->
+	<script src="js/controllers/HomeController.js"></script>
+	<script src="js/controllers/LoginController.js"></script>
+	<script src="js/controllers/SignupController.js"></script>
+	<script src="js/controllers/IndexController.js"></script>
+	<script src="js/controllers/uploadController.js"></script>
+	
+</body>
+</html>
