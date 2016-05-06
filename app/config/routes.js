@@ -12,6 +12,10 @@ var Pages = mongoose.model('Pages');
 
 var passport = require('passport');
 var jwt = require('jsonwebtoken');
+// for XSS protection
+
+var sanitizeHtml = require('sanitize-html');
+
 
 module.exports = function(app) {
   app.post('/users', users.createUser);
@@ -88,18 +92,24 @@ var token = req.body.token || req.query.token || req.headers['x-access-token'];
         req.decoded = decoded;    
 
 		
-		   	    console.log("into create page and token is authenticated");
+		   	  console.log("into create page and token is authenticated");
+
+					var text = req.query.pagetext;
+					
+					text = sanitizeHtml(text, {
+  				allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ])
+					});
 
 					console.log("user name    "+ req.query.username);
 					console.log("pagename   "+ req.query.pagename);
 					console.log("pageImageURL   "+ req.query.pageimageurl);
-					console.log("pageText   "+ req.query.pagetext);
+					console.log("pageText   "+ text);
 	
 	
 		      var page = new Pages({username: req.query.username, pages: {
 		      	 pageName: req.query.pagename,
   					 pageImageURL: req.query.pageimageurl,
-  					 pageText: req.query.pagetext,
+  					 pageText: text,
 		      }});
 		      
       page.save(function(err){
