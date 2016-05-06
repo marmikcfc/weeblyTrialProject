@@ -1,11 +1,18 @@
 // TODO change the Thing name here and in the models folder to follow the name Object you are creating
 
-//var Thing = require('../models/thing');  // load the thing mongoose model - change as needed
 //var User = require('../models/user');  // load the User mongoose model for passport.js authentication
 
 
+
+var pages = require('../models/pages');  // load the thing mongoose model - change as needed
 var users = require('../controllers/users');
+//var pages = require('../controllers/pages');
+var mongoose = require('mongoose');
+var Pages = mongoose.model('Pages');
+
 var passport = require('passport');
+var jwt = require('jsonwebtoken');
+
 module.exports = function(app) {
   app.post('/users', users.createUser);
   //OAUTH routes
@@ -22,6 +29,7 @@ module.exports = function(app) {
   app.get("/auth/google/callback",
     passport.authenticate("google",
       { failureRedirect: "/", successRedirect:"/" }));
+      
   //local auth route
   app.post('/login', function(req, res, next){
     passport.authenticate('local', function(err, user, info){
@@ -32,11 +40,16 @@ module.exports = function(app) {
       }
       req.logIn(user, function(err){
         if(err){ return next(err);}
+        
+        var token = jwt.sign(user, 'shhhhh', {
+          expiresIn: 6000 // expires in 600 Mins
+        });
+        
         console.log('success');
         console.log(req.isAuthenticated());
         console.log(req.user);
         console.log('req session:', req.session);
-        return res.json({data:user});
+        return res.json({data:user, token: token});
       });
     })(req,res,next);
   });
@@ -57,6 +70,70 @@ module.exports = function(app) {
   app.get('/getAllUsers', users.getAllUsers);
   app.post('/addFriend', users.addFriend);
 
+//create pages
+  app.post('/api/pages', function(req, res) {
+      	
+var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+      	console.log("token   "+token);
+      	 // decode token
+  if (token) {
+
+    // verifies secret and checks exp
+    jwt.verify(token, 'shhhhh', function(err, decoded) {      
+      if (err) {
+        return res.json({ success: false, message: 'Failed to authenticate token.' });   
+      } else {
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;    
+
+		
+		   	    console.log("into create page and token is authenticated");
+
+					console.log("user name    "+ req.query.username);
+					console.log("pagename   "+ req.query.pagename);
+					console.log("pageImageURL   "+ req.query.pageimageurl);
+					console.log("pageText   "+ req.query.pagetext);
+	
+	
+		      var page = new Pages({username: req.query.username, pages: {
+		      	 pageName: req.query.pagename,
+  					 pageImageURL: req.query.pageimageurl,
+  					 pageText: req.query.pagetext,
+		      }});
+		      
+      page.save(function(err){
+        if(err){
+          res.json({err: err});
+        } else {
+          res.json(page);
+        }
+      })
+				
+      //  res.json({ message: 'hooray!! API is authenticated' });
+
+      }
+    });
+
+  }
+
+  else{
+  	return res.json({ success: false, message: 'Failed to authenticate token.' });    
+  }
+  });
+  
+/*//get pages
+  app.get('/api/pages', pages.getAllPages());
+  
+//update pages
+  app.post('/api/pages/:id', pages.updatePage());
+  
+//get pages by ID
+  app.get('/api/pages/:id', pages.getPagebyID());
+
+//delete page
+	app.delete('/api/pages/:id', pages.deletePage() );
+*/
 };
 
 /*module.exports = function(app, passport) {
