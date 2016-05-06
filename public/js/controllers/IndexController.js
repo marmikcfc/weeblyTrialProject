@@ -16,7 +16,6 @@ app.controller('IndexController', function($scope, $http, $location, userFactory
   
 
 
-  
   $scope.createUser = function(input){
     console.log('make this new user', input);
     //call factory
