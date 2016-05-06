@@ -11,12 +11,37 @@ var mongoose = require('mongoose');
 var Pages = mongoose.model('Pages');
 
 var passport = require('passport');
-var jwt = require('jsonwebtoken');
-// for XSS protection
 
+// going to use it as CSRF too but currently it's just authentication for api
+var jwt = require('jsonwebtoken');
+
+// for XSS protection
 var sanitizeHtml = require('sanitize-html');
 
 
+// for sending XML response
+//var o2x = require('object-to-xml');
+
+var js2xmlparser = require("js2xmlparser");
+
+//var data2xml = require('data2xml');
+
+//var convert = data2xml();
+
+
+//var EasyXml = require('easyxml');
+
+/*var serializer = new EasyXml({
+    singularize: true,
+    rootElement: 'response',
+    dateFormat: 'ISO',
+    manifest: true
+});
+*/
+
+
+var builder = require('xmlbuilder');
+  
 module.exports = function(app) {
   app.post('/users', users.createUser);
   //OAUTH routes
@@ -116,7 +141,33 @@ var token = req.body.token || req.query.token || req.headers['x-access-token'];
         if(err){
           res.json({err: err});
         } else {
-          res.json(page);
+        	
+        	if(req.query.responsetype == "xml"){
+					
+					console.log(page.toJSON());
+//					console.log ("xml response   "+ console.log(serializer.render(page.toJSON())));
+
+//console.log("XML RESPONSE"+ js2xmlparser("page",page.toJSON()));
+
+/*var xml = builder.create('root')
+  .ele('page')
+    .ele(page.toJSON())
+  .end({ pretty: true});
+*/
+
+					res.set('Content-Type', 'text/xml');
+			//		res.send(xml);		
+		
+		//var xml = convert('Root', page.toJSON());
+	  //console.log(xml);
+	  //res.send(xml);
+					res.send(js2xmlparser("page",page.toJSON()));      
+		//	res.json(page);
+        	}
+        	else{          
+        		res.json(page);
+        	}
+
         }
       })
 				
