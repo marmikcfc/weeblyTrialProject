@@ -2,7 +2,7 @@
 var express  = require('express');
 var app      = express(); 								// create our app w/ express
 var mongoose = require('mongoose'); 					// mongoose for mongodb
-var database = require('./config/database'); 			// load the database config
+var database = require('./app//config/database'); 			// load the database config
 var cookieParser = require('cookie-parser');
 var morgan   = require('morgan');
 var bodyParser = require('body-parser');
@@ -11,13 +11,15 @@ var passport = require('passport');
 var flash = require('connect-flash');
 var session = require('express-session');
 var multer = require('multer');
-
-
+var path = require("path");
+var passportLocal = require('passport-local');
 
 var port = process.env.PORT || 8080 // setting up the port
 
+
+
 // configuration ===============================================================
-mongoose.connect(database.url); 	// connect to mongoDB database on modulus.io
+//mongoose.connect(database.url); 	// connect to mongoDB database on modulus.io
 
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev')); // log every request to the console
@@ -28,24 +30,35 @@ app.use(methodOverride('X-HTTP-Method-Override')); // override with the X-HTTP-M
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(session({
     secret: 'imsuperman',
-    proxy: true,
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: false
 }));
+
+
+
+
+//passport configuration
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./app/config/mongoose.js');
+require('./app/config/passport.js');
+
+// authentication
+require("./app/auth/fb_auth.js");
+require("./app/auth/google_auth.js")
+
+/*
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 require('./config/passport')(passport); // pass passport for configuration
-
+*/
 // routes
-require('./app/routes.js')(app, passport);
+require('./app/config/routes.js')(app);
 
-// use express routing for pages refresh
-app.get('/*', function(req, res, next) {
-  // Just send the index.html for other files to support HTML5Mode
-  res.sendFile('/public/index.html', { root: __dirname });
-});
+
 
 
 //cors for file upload

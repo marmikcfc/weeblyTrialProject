@@ -1,38 +1,60 @@
-app.controller('LoginController', function($scope, $http, $location) {
+app.controller('LoginController', function($scope, $http, $location, userFactory) {
 
-  // booleans to show/hide alerts
-  $scope.submitted = false;
-  $scope.showErrorAlert = false;
+ $scope.registeredUser = {};
+  $scope.error = {};
+  userFactory.checkLogin(function(response){
+    console.log(response);
+    if(response.data){
+      $location.url('/dashboard');
+    }
+  });
+  $scope.createUser = function(input){
+    console.log('make this new user', input);
+    //call factory
+    userFactory.createUser(input, function(response){
+      console.log(response);
+    })
+    $scope.newUser = {};
 
-  // alert string
-  $scope.errorAlert = '';
-
-  // account model for our view
-  $scope.account = {
-    email : '',
-    password : ''
   }
 
-  // at login button click
-  $scope.login = function(account) {
-    $scope.submitted = true;
-
-    // user obj we are sending to the server
-    var user = {
-      email : account.email,
-      password : account.password
-    };
-
-    $http.post("/api/login", user)
-    .success(function (data, status) {
-      console.log('Successful login.');
-      // if successfull redirect to /
-      $location.path("/");
+  $scope.loginUser = function(input){
+    console.log('trying to login user with', input);
+    //call factory
+    userFactory.loginUser(input, function(response){
+      console.log(response);
+      if(response.err){
+        console.log('there was an error!');
+        $scope.error.message = response.err;
+      } else {
+        console.log('no error, log them in');
+        $location.url('/dashboard');
+      }
     })
-    .error(function (data) {
-      console.log('Error: ' + data);
-      $scope.showErrorAlert = true;
-      $scope.errorAlert = data[0];
-    });
-  };
+    $scope.userData = {};
+  }
+
+ $scope.user = {};
+  userFactory.getUser(function(data){
+    console.log(data);
+    $scope.user = data;
+  })
+  if(!$scope.user.username){
+    $location.url('/');
+  }
+  userFactory.getAllUsers(function(data){
+    console.log(data, 'all user data');
+    $scope.persons = data;
+  })
+
+  $scope.addFriend = function(friend, user){
+    userFactory.addFriend(friend, user, function(response){
+    })
+  }
+
+  $scope.logout = function(){
+    userFactory.logoutUser();
+    $location.url('/');
+  }
+
 });

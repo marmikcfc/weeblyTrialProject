@@ -1,0 +1,171 @@
+<h1>this is the dashboard</h1>
+<div ng-controller='dashboardController'>
+  <h1>Hello username:<span ng-bind='user.username'></span></h1>
+  <h3>Your name is : <span ng-bind='user.name'></span></h3>
+  <img src='{{user.pictureURL}}'/>
+  <h2>Available Friends</h2>
+  <ul ng-repeat="person in persons">
+  	<li ng-model="person">{{person.username}} <button ng-click="addFriend(person, user)">Add Friend</button></li>
+  </ul>
+  <h2>Friends List</h2>
+  <div >
+	  <ul ng-repeat="friend in user.friends">
+	  	<li>{{friend.username}}</li>
+	  </ul>
+  </div>
+  <button ng-click='logout()'>logout</button>
+</div>
+
+
+<div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+              
+        <li>       <h2> Templates </h2> </li> 
+        
+    <li id="pages">    <button type="button" class="btn btn-secondary"> <span contenteditable="true"> Page </span>  </button>         
+     <div add-div-directive></div> </li>
+
+
+
+    </ul>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+ 
+   
+    <div id="main">
+        <ul id="websiteNav" style="display:inline">
+                    <li>
+            <md-button>  <span contenteditable = "true"> Page 1 </span>
+                </md-button> 
+                    </li>
+    
+                    <li>
+            <md-button>  <span contenteditable = "true"> Page 2 </span>
+                </md-button> 
+                    </li>
+    
+                    <li>
+            <md-button>  <span contenteditable = "true"> Page 3 </span>
+                </md-button> 
+                    </li>
+    
+                    <li>
+            <md-button>  <span contenteditable = "true"> Page 4</span>
+                </md-button> 
+                    </li>
+    
+                        
+                </ul>
+    
+    <br />
+    <br />
+    
+    <div>
+        
+          <form  ng-controller="MyCtrl as up" name="up.upload_form">
+                Single Image with validations
+            <input 
+               type="file" 
+               ngf-select 
+               ng-model="up.file" 
+               name="file" 
+               ngf-pattern="'image/*'"
+               accept="image/*" 
+               ngf-max-size="20MB" 
+               />
+            Image thumbnail: <img style="width:100px;" ngf-thumbnail="up.file || '/thumb.jpg'"/>
+            <i ng-show="up.upload_form.file.$error.required">*required</i><br>
+            <i ng-show="up.upload_form.file.$error.maxSize">File too large 
+            MB: max 20M</i>
+            <button type="submit" ng-click="up.submit()">submit</button>
+            <p></p>
+        </form>
+        
+    </div>
+    
+       
+       <br>
+       <br>
+       
+       <div>
+           
+               <md-button>  <h1 contenteditable = "true"> Add Title Here </h1>
+                </md-button> 
+                    </li>
+    
+       </div>
+       
+       <div>
+           
+           <div style="float: left; width:40%">
+            
+             
+                 
+              <p contenteditable="true">
+                  
+                   Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+               sed diam nonummy nibh euismod tincidunt ut laoreet dolore
+               magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
+               quis nostrud exerci tation ullamcorper suscipit lobortis nisl
+               ut aliquip ex ea commodo consequat. Duis autem vel eum iriure
+               dolor in hendrerit in vulputate velit esse molestie consequat,
+               vel illum dolore eu feugiat nulla facilisis at vero eros et
+               accumsan et iusto odio dignissim qui blandit praesent luptatum
+               zzril delenit augue duis dolore te feugait nulla facilisi.
+               Nam liber tempor cum soluta nobis eleifend option congue
+               nihil imperdiet doming id quod mazim placerat facer possim
+               assum. Typi non habent claritatem insitam; est usus legentis
+               in iis qui facit eorum claritatem. Investigationes
+               demonstraverunt lectores legere me lius quod ii legunt saepius.
+               Claritas est etiam processus dynamicus, qui sequitur mutationem
+               consuetudium lectorum. Mirum est notare quam littera gothica,
+               quam nunc putamus parum claram, anteposuerit litterarum formas
+               humanitatis per seacula quarta decima et quinta decima. Eodem
+               modo typi, qui nunc nobis videntur parum clari, fiant sollemnes
+               in futurum.
+                  
+              </p>
+              
+         
+              
+           </div>
+           
+           <div style="float: right; width:40%">
+               <input type="textarea" name="paragraph"/>
+           </div>
+           
+       </div>
+        
+    </div>
+            
+ 
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+  
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+       // $("#wrapper").toggleClass("toggled");
+    });
+    </script>

@@ -1,5 +1,5 @@
 
-    app.controller('MyCtrl',['Upload','$window',function(Upload,$window){
+    app.controller('MyCtrl',['Upload','$window',function(Upload,$window, userFactory){
         var vm = this;
         vm.submit = function(){ //function to call on form submit
             if (vm.upload_form.file.$valid && vm.file) { //check if from is valid
